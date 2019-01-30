@@ -1,0 +1,49 @@
+% This script generates and saves a graph Laplacian matrix
+sub = 'AH';
+mask_length = 3;
+cube_length = 3;
+fbase = './data/';
+roiname = 'EBA'; % set to 'wb' for whole cortex analysis
+
+% load cortical mask or an ROI mask 
+if strcmp(roiname,'wb')
+    switch sub(1:2)
+        case 'SN'
+            files.mask = sprintf('./data/20100714SN_cortical_sheet_fs.hf5');
+        case 'AV'
+            files.mask = sprintf('./data/20101002AV_cortical_sheet_fs.hf5');
+        case 'AH'
+            files.mask = sprintf('./data/20100824AH_cortical_sheet_fs.hf5');
+        case 'TC'
+            files.mask = sprintf('./data/20101001TC_cortical_sheet_fs.hf5');
+        case 'JG'
+            files.mask = sprintf('./data/20110321JG_cortical_sheet_fs.hf5');
+    end
+    targetvoxels = hdf5read(files.mask,'maskind_tvoxels'); % targetvoxels stores the indices of cortical voxels
+else
+    rois = sprintf('%sROI_%s.mat',fbase,sub); 
+    eval(['load ' rois]); % load ROIs
+    roiloc = strfind(roilist,roiname);
+    roiid = find(not(cellfun('isempty',roiloc)));
+    targetvoxels = roivox{roiid}; % targetvoxels stores the indices of 
+end
+
+fbase = './data/'; % path where neighborhood file is located
+load(sprintf('%sneighbor_%s_%dc%d.mat',fbase,sub,cube_length,mask_length),'position_matrix','mask_matrix')
+cort = position_matrix(targetvoxels,:);
+roi_gauss = mask_matrix(targetvoxels,:);
+[~,b] = ismember(cort,targetvoxels);
+sz = size(cort);
+roi_nei = single(zeros(sz(1))); % roi_nei is denoted as matrix 'C' in the paper
+T = single(zeros(sz(1)));
+
+for vox = 1:sz(1)
+    [c,d] = find(b(vox,:)~=0);
+    roi_nei(vox,b(vox,d)) = roi_gauss(vox,d);
+end
+roi_nei(find(eye(length(T))==1)) = 0;
+T(find(eye(length(T))==1)) = sum(roi_nei);
+L = T - roi_nei; % graph Laplacian
+
+% Only need to save L
+eval(['save -v7.3 ' sprintf('%s_roi_neighbor_%s_%s_%dc%d',fbase,sub,roiname,cube_length,mask_length)  '.mat L']);
