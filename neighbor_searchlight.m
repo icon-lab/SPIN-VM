@@ -5,7 +5,7 @@ function [position_matrix,mask_matrix]=neighbor_searchlight(sub,cube_length,mask
 % Example => neighbor_searchlight('S1',3,3,'gaussian')
 
 fbase = './data/';
-load(sprintf('%ssem%s_presp_R.mat',fbase,sub),'tvoxels'); % tvoxels = array storing the indices of target (brain) voxels
+load(sprintf('%ssem%s_presp_R.mat',fbase,sub),'tvoxels'); % tvoxels = array storing the indices of brain voxels
 slices = 32; % number of transverse slices
 
 offset = 2*cube_length;

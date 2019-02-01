@@ -11,7 +11,6 @@ function [ws, cmode] = vm_solve(X, Y, as, Xtest, testfeats)
 %        ws: estimated weights (NxVxA matrix) if no testing data is provided
 %            estimated response (TxVxA matrix) if testing data is given
 
-
 if exist('Xtest', 'var')
     if ~exist('testfeats','var')
         testfeats = 1:size(X,2);

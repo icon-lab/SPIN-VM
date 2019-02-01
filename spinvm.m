@@ -122,7 +122,7 @@ fskip.mode = 1;
 stimsh = stimsh.';
 stimsh = stimsh - repmat(mean(stimsh,1),size(stimsh,1),1);
 % Response prep and demeaning
-respsh = resp(trnSamp(numTrainingSamples),targetvoxels);
+respsh = resp;
 respsh = respsh(timeidx,:);
 respsh = respsh - repmat(mean(respsh,1),size(respsh,1),1);
 
@@ -160,7 +160,7 @@ elseif stage == 2
     stimshv = stimshv.';
     stimshv = stimshv - repmat(mean(stimshv,1),size(stimshv,1),1);
     % Prep response matrix     
-    respshv = resp(ranges.vrange,targetvoxels);    
+    respshv = resp(ranges.vrange,:);    
     respshv = respshv(timeidx,:);
     respshv = respshv - repmat(mean(respshv,1),size(respshv,1),1);
     % Extract validation samples
