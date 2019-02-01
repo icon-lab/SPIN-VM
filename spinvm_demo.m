@@ -7,6 +7,11 @@
 % SPIN-VM leverages correlations across neighboring voxels to better
 % predict fMRI responses obtained on independent test data and to better
 % capture locally congruent information representations across cortex compared to VM.
+% semS1_presp_R.mat stores the preprocessed BOLD response file for a single ROI (PPA) 
+% Response file should be of size (time points X number of voxels) and stimulus file should be of size (time points X number of features)
+% semgab2_movie_stim.mat stores the preprocessed stimulus file
+% ROI_S1.mat stores ROI indices, and semS1_Rvallcvall_noise_cf.hf5 stores noise correction factors
+% These files can be found in the data folder
 
 % Initialize variables
 sub = 'S1'; % subject name
