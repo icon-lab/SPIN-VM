@@ -7,12 +7,14 @@ function [position_matrix,mask_matrix]=neighbor_searchlight(sub,cube_length,mask
 fbase = './data/';
 load(sprintf('%ssem%s_presp_R.mat',fbase,sub),'tvoxels'); % tvoxels = array storing the indices of brain voxels
 slices = 32; % number of transverse slices
+x = 100; % x and y give the matrix size in the transverse plane
+y = 100; % matrix size is 100x100 for the dataset used here
 
 offset = 2*cube_length;
-temp_padded = zeros(100+offset,100+offset,slices+offset);
-temp_not_padded = zeros(100,100,slices);
+temp_padded = zeros(x+offset,y+offset,slices+offset);
+temp_not_padded = zeros(x,y,slices);
 temp_not_padded(tvoxels) = tvoxels;
-temp_padded((1:100)+cube_length,(1:100)+cube_length,(1:slices)+cube_length) = temp_not_padded;
+temp_padded((1:x)+cube_length,(1:y)+cube_length,(1:slices)+cube_length) = temp_not_padded;
 window = (cube_length-1)/2;
 neighborhood = ((cube_length^3))+1;
 position_matrix = zeros(length(tvoxels),neighborhood);
@@ -24,7 +26,7 @@ temp_matrix = zeros(size(mask));
 
 for voxel_index=1:length(tvoxels)    
     
-    [row,column,slice] = ind2sub([100,100,slices],tvoxels(voxel_index)); % each slice is of size 100x100       
+    [row,column,slice] = ind2sub([x,y,slices],tvoxels(voxel_index)); % each slice is of size 100x100       
     % check the range of neighbors    
     s_l = slice-window+cube_length;
     s_r = slice+window+cube_length;   
