@@ -6,6 +6,7 @@ function [position_matrix,mask_matrix]=neighbor_searchlight(sub,cube_length,mask
 
 fbase = './data/';
 load(sprintf('%ssem%s_presp_R.mat',fbase,sub),'tvoxels'); % tvoxels = array storing the indices of brain voxels
+
 slices = 32; % number of transverse slices
 x = 100; % x and y give the matrix size in the transverse plane
 y = 100; % matrix size is 100x100 for the dataset used here
